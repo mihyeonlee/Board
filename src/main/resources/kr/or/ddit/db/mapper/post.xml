@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	<select id="getPostList" resultType="PostVo">
+		SELECT *
+		FROM post
+	</select>
+
+	<select id="getPostPage" resultType="PostVo"
+		parameterType="PageVo">
+		SELECT *
+		FROM
+		(SELECT ROWNUM rn, b.*
+		FROM
+		(SELECT a.post_p_seq,a.post_gn,a.post_seq, a.post_title , a.user_id,
+		a.post_reg_dt, a.board_seq
+		FROM (SELECT *
+		FROM post
+		WHERE board_seq = #{board_seq}
+		ORDER BY 1 desc) a
+		START WITH post_p_seq IS NULL
+		CONNECT BY PRIOR post_seq = post_p_seq
+		ORDER SIBLINGS BY post_gn DESC,post_seq asc) b) c
+		WHERE rn BETWEEN (#{page}-1) * #{pageSize} +1 AND #{page} * #{pageSize}
+
+
+		<!-- SELECT * -->
+		<!-- FROM -->
+		<!-- (SELECT ROWNUM rn, a.* -->
+		<!-- FROM -->
+		<!-- (SELECT * -->
+		<!-- FROM post -->
+		<!-- WHERE board_seq = #{board_seq} -->
+		<!-- ORDER BY 1 desc) a) -->
+		<!-- WHERE rn BETWEEN (#{page}-1) * #{pageSize} +1 AND -->
+		<!-- #{page} * #{pageSize} -->
+
+	</select>
+
+	<select id="getPostTotalCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM post
+		WHERE board_seq = #{board_seq}
+
+	</select>
+
+	<insert id="insertPost" parameterType="PostVo">
+		<selectKey keyProperty="post_seq" resultType="int" order="BEFORE">
+			select POST_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+
+		INSERT INTO post
+		VALUES(#{post_seq},#{post_seq},#{post_title},SYSDATE,#{post_content},#{post_yn},#{board_seq},#{user_id},#{post_p_seq);
+
+
+	</insert>
+</mapper>
