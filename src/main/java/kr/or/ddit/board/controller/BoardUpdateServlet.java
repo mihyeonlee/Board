@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import kr.or.ddit.board.model.BoardVo;
 import kr.or.ddit.board.service.BoardService;
 import kr.or.ddit.board.service.BoardServiceI;
-import kr.or.ddit.user.model.UserVo;
 
 
 @WebServlet("/boardUpdate")

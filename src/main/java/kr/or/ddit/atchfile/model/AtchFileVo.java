@@ -5,6 +5,7 @@ public class AtchFileVo {
 	private String file_path ;
 	private String file_name ;
 	private int post_seq;
+	
 	public int getAtch_file_seq() {
 		return atch_file_seq;
 	}

@@ -9,13 +9,10 @@ public class ReplyVo {
 	private String reply_yn;
 	private int post_seq;
 	private String user_id;
-	public ReplyVo(int reply_seq, String reply_content, Date reply_reg_dt, String reply_yn, int post_seq,
+	
+	public ReplyVo( String reply_content, int post_seq,
 			String user_id) {
-		super();
-		this.reply_seq = reply_seq;
 		this.reply_content = reply_content;
-		this.reply_reg_dt = reply_reg_dt;
-		this.reply_yn = reply_yn;
 		this.post_seq = post_seq;
 		this.user_id = user_id;
 	}

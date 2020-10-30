@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="atchFile">
+	
+	
+	<insert id="insertFile" parameterType="AtchFileVo">
+		INSERT INTO atch_file VALUES(FILE_SEQ.NEXTVAL, #{file_path},#{file_name},#{post_seq})
+	</insert>
+	
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM atch_file 
+		WHERE atch_file_seq = #{atch_file_seq}
+	</delete>
+	
+	<select id="getFile" parameterType="int" resultType="AtchFileVo">
+		SELECT * FROM atch_file WHERE atch_file_seq = #{atch_file_seq}
+	</select>
+</mapper>

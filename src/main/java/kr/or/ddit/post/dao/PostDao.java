@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kr.or.ddit.atchfile.model.AtchFileVo;
 import kr.or.ddit.db.MybatisUtil;
 import kr.or.ddit.page.model.PageVo;
 import kr.or.ddit.post.model.PostVo;
@@ -41,13 +42,79 @@ public class PostDao implements PostDaoI {
 	}
 
 	@Override
-	public int insertPost(PostVo postVo) {
-		SqlSession sqlSession = MybatisUtil.getSqlSession();
-		int cnt = 0;
-		cnt = sqlSession.insert("post.insertPost",postVo);
-		sqlSession.close();
+	public int insertPost(PostVo postVo, SqlSession sqlSession) {
+
+		int pCnt = 0;
+		try {
+			pCnt = sqlSession.insert("post.insertPost",postVo);
+		} catch (Exception e) {
+			
+		}
 		
+		return pCnt;
+	}
+
+	
+	@Override
+	public PostVo getPost(int post_seq) {
+		SqlSession sqlSession = MybatisUtil.getSqlSession();
+		PostVo postVo = sqlSession.selectOne("post.getPost",post_seq);
+		
+		sqlSession.close();
+		return postVo;
+	}
+
+	@Override
+	public List<AtchFileVo> getFile(int post_seq) {
+		SqlSession sqlSession = MybatisUtil.getSqlSession();
+		List<AtchFileVo> fileList = sqlSession.selectList("post.getFile",post_seq);
+		
+		sqlSession.close();
+		return fileList;
+	}
+
+	@Override
+	public int deletePost(int post_seq) {
+		SqlSession sqlSession = MybatisUtil.getSqlSession();
+		
+		int cnt = 0;
+		try {
+			cnt = sqlSession.update("post.deletePost",post_seq);
+		} catch (Exception e) {
+			
+		}
+		if(cnt==1) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		sqlSession.close();
 		return cnt;
 	}
+
+	@Override
+	public int insertAnswer(PostVo postVo,SqlSession sqlSession) {
+		int pCnt = 0;
+		try {
+			pCnt = sqlSession.insert("post.insertAnswer",postVo);
+		} catch (Exception e) {
+			
+		}
+		
+		return pCnt;
+	}
+
+	@Override
+	public int updatePost(PostVo postVo,SqlSession sqlSession) {
+		int pCnt = 0;
+		try {
+			pCnt = sqlSession.update("post.updatePost",postVo);
+		} catch (Exception e) {
+			
+		}
+		return pCnt;
+	}
+	
+	
 
 }

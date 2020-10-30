@@ -32,7 +32,7 @@ public class BoardDaoTest {
 	@Test
 	public void insertBoardTest() {
 		/***Given***/
-		BoardVo boardVo = new BoardVo("미현게시판", "Y", "brown");
+		BoardVo boardVo = new BoardVo("미현게시판789", "Y", "brown");
 		
 		/***When***/
 		int insert_cnt = boardDao.insertBoard(boardVo);

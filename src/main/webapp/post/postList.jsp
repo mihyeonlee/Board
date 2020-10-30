@@ -31,20 +31,6 @@
 
 }
 </style>
-
-<script>
-$(document).ready(function(){
-	$('#postList tr').on('click',function(){
-		// data-userid <tr>태그에 적어놓음
-		var post_seq = $(this).data("post_seq");
-		console.log("post_seq : "+ post_seq);
-
-		document.location = "/post?post_seq=" + post_seq;
-		
-	});
-});
-	
-</script>
 <%@ include file="/layout/commonLib.jsp" %> 
 </head>
 <body>
@@ -61,7 +47,7 @@ $(document).ready(function(){
 				
 				<div class="row">
 					<div class="col-sm-8 blog-main">
-						<h2 class="sub-header">${pageVo.board_name}</h2>
+						<h2 class="sub-header">${S_BOARD.board_name}</h2>
 						<div class="table-responsive">
 						
 							<br>
@@ -76,13 +62,19 @@ $(document).ready(function(){
 								<!--테이블내에서 가지고오려는 데이터를 나눌때 tbody많이 사용 -->
 								<tbody id="postList">
 									<c:forEach items="${postList }" var="post">
-										<tr>
+										<tr data-post_seq="${post.post_seq }">
 											<td>${post.post_seq}</td>
 											<td class="ptitle">
+											<c:if test=""></c:if>
 											<c:choose>
-											<c:when test="${post.post_p_seq != 0 }">
+											<c:when test="${post.post_p_seq != null && post.post_yn =='Y'}">
 												<span id="re">&nbsp;&nbsp;&nbsp;ㄴ 답 : ${post.post_title} </span>
 											</c:when>
+											
+											<c:when test="${post.post_yn == 'N' }">
+												<span class="depost">&nbsp;&nbsp;&nbsp;[삭제된 게시글 입니다.] </span>
+											</c:when>
+											
 											<c:otherwise>
 												${post.post_title}
 											</c:otherwise>
@@ -100,12 +92,22 @@ $(document).ready(function(){
 							</table>
 							</form>
 						</div>
-							<a class="btn btn-default pull-right" href="${cp }/postRegist?board_name=${pageVo.board_name}">게시글 작성</a>
+							<a class="btn btn-default pull-right" href="${cp }/postRegist?board_name=${S_BOARD.board_name}">게시글 작성</a>
 						
 						page:${page }
 						<div class="text-center">
 							<ul class="pagination">
-								<li><a href="${pageContext.request.contextPath }/postList?page=1&board_seq=${pageVo.board_seq}&board_name=${pageVo.board_name}" >&lt;&lt;</a></li>
+								<li><a href="${pageContext.request.contextPath }/postList?page=1&board_seq=${pageVo.board_seq}&board_name=${S_BOARD.board_name}" >&lt;&lt;</a></li>
+								
+								<c:if test="${page-1  > 0 }">
+								<li><a href="${pageContext.request.contextPath }/postList?page=${page-1 }&board_seq=${pageVo.board_seq}&board_name=${S_BOARD.board_name}" >&lt;</a></li>
+								</c:if>
+								
+								<c:if test="${page-1  == 0 }">
+								<li><a>&lt;</a></li>
+								</c:if>
+								
+								
 								<c:forEach begin="1" end="${pages }" var="i">
 									<c:choose>
 									
@@ -114,27 +116,47 @@ $(document).ready(function(){
 										</c:when>
 										
 										<c:otherwise>
-											<li><a href="${pageContext.request.contextPath }/postList?page=${i}&board_seq=${pageVo.board_seq}&board_name=${pageVo.board_name}" >${i }</a></li>
+											<li><a href="${pageContext.request.contextPath }/postList?page=${i}&board_seq=${pageVo.board_seq}&board_name=${S_BOARD.board_name}" >${i }</a></li>
 										</c:otherwise>
 										
 									</c:choose>
 								</c:forEach>
-								<li><a href="${pageContext.request.contextPath }/postList?page=${pages }&board_seq=${pageVo.board_seq}&board_name=${pageVo.board_name}" >&gt;&gt;</a></li>
+								<c:if test="${page < pages }">
+								<li><a href="${pageContext.request.contextPath }/postList?page=${page+1 }&board_seq=${pageVo.board_seq}&board_name=${S_BOARD.board_name}" >&gt;</a></li>
+								</c:if>
+								
+								<c:if test="${page  == pages }">
+								<li><a>&gt;</a></li>
+								</c:if>
+								<li><a href="${pageContext.request.contextPath }/postList?page=${pages }&board_seq=${pageVo.board_seq}&board_name=${S_BOARD.board_name}" >&gt;&gt;</a></li>
 							</ul>
 						</div>
-
 					</div>
 				</div>
-				
-				
-				
 			</div>
-
-			
 		</div>
 	</div>
+<script>
 
+$(".depost").on('click', function(e){
+
+	alert("삭제된 게시글입니다.")
+	e.stopPropagation();
+});
+
+	
+	$('#postList tr').on('click',function(){
+		// data-userid <tr>태그에 적어놓음
+		var post_seq = $(this).data("post_seq");
+		console.log("post_seq : "+ post_seq);
+
+		document.location = "/post?post_seq=" + post_seq;
+		
+	});
+
+</script>
 </body>
+
 
 
 

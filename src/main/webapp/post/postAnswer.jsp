@@ -39,15 +39,17 @@ input[type=file] {
 			
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-8 blog-main">
-					<h2 class="sub-header">${board_name}</h2>
+					<h2 class="sub-header">${S_BOARD.board_name}</h2>
 					
 					<div class="table-responsive">
 					
-						<form id="iform" action="${cp }/postRegist" method="POST" 
+						<form id="iform" action="${cp }/postAnswer" method="POST" 
 							  enctype="multipart/form-data" role="form">
 							
 							<input type="hidden" name="user_id" value="${S_USER.user_id }" >
 							<input type="hidden" name="board_seq" value="${S_BOARD.board_seq}" >
+							<input type="hidden" name="post_p_seq" value="${postVo.post_seq }">
+							<input type="hidden" name="post_gn" value="${postVo.post_gn}" >
 							<input type="hidden" name="post_yn" value="Y" >
 							
 							<label for="post_title" class="col-sm-2 control-label">제목</label>

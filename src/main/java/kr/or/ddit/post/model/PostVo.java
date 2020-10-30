@@ -12,10 +12,10 @@ public class PostVo {
 	private String post_yn;
 	private int board_seq;
 	private String user_id;
-	private int post_p_seq;
+	private String post_p_seq;
 	
 	public PostVo(String post_title, String post_content, String post_yn,
-			int board_seq, String user_id, int post_p_seq) {
+			int board_seq, String user_id, String post_p_seq) {
 		super();
 		this.post_title = post_title;
 		this.post_content = post_content;
@@ -75,10 +75,10 @@ public class PostVo {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	public int getPost_p_seq() {
+	public String getPost_p_seq() {
 		return post_p_seq;
 	}
-	public void setPost_p_seq(int post_p_seq) {
+	public void setPost_p_seq(String post_p_seq) {
 		this.post_p_seq = post_p_seq;
 	}
 	@Override
@@ -88,7 +88,7 @@ public class PostVo {
 		result = prime * result + board_seq;
 		result = prime * result + ((post_content == null) ? 0 : post_content.hashCode());
 		result = prime * result + post_gn;
-		result = prime * result + post_p_seq;
+		result = prime * result + ((post_p_seq == null) ? 0 : post_reg_dt.hashCode());
 		result = prime * result + ((post_reg_dt == null) ? 0 : post_reg_dt.hashCode());
 		result = prime * result + post_seq;
 		result = prime * result + ((post_title == null) ? 0 : post_title.hashCode());

@@ -39,32 +39,45 @@ input[type=file] {
 			
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<div class="col-sm-8 blog-main">
-					<h2 class="sub-header">${board_name}</h2>
+					<h2 class="sub-header">${S_BOARD.board_name}</h2>
 					
 					<div class="table-responsive">
 					
-						<form id="iform" action="${cp }/postRegist" method="POST" 
+						<form id="iform" action="${cp }/postUpdate" method="POST" 
 							  enctype="multipart/form-data" role="form">
 							
 							<input type="hidden" name="user_id" value="${S_USER.user_id }" >
 							<input type="hidden" name="board_seq" value="${S_BOARD.board_seq}" >
 							<input type="hidden" name="post_yn" value="Y" >
+							<input type="hidden" name ="post_seq" value="${postVo.post_seq }">
 							
-							<label for="post_title" class="col-sm-2 control-label">제목</label>
-							<input type="text" name="post_title" > <br><br>
+							<label for="post_title" class="col-sm-2 control-label" >제목</label>
+							<input type="text" name="post_title" value="${postVo.post_title }"> <br><br>
 							
-							<textarea rows="" cols="" id="summernote" name="post_content"></textarea>
+							<textarea rows="" cols="" id="summernote" name="post_content">${postVo.post_content }</textarea>
 							
 							<div class="form-group">
 								<label for="realFilename" class="col-sm-2 control-label">첨부 파일</label>
-									<input type="button" class="btn btn-default" id="addFile" value="파일 추가">
-									<input type="submit" class="btn btn-default pull-right" value="작성완료"> 
+									<div class="col-sm-10">
+										<input type="hidden" value="${fileList.size() }" name="fileListSize">
+										<c:forEach var="i" begin="1" end="${fileList.size() }" step="1" varStatus="status">
+											<input type="button" name="${i }" class="btn btn-default" id="profileBtn${i }" style="margin-right: 200px; height: 30px;margin-bottom: 3px;" value="${fileList[i-1].file_name }">
+											<input type="hidden" value="${fileList[i-1].atch_file_seq }" name="em" id = "deleteFile${i }">
+											<input type="button" value="x" name="profileBtn${i }" class="btn btn-default dfile" style="padding: 3px 6px;"/>
+											
+										<br>
+										</c:forEach>
+										<br>
+									
+									<p></p>
 									<br><br>
-									<input type="hidden" class ="realFilename" name="realFilename1"><input type="hidden" value="x" name="deleteFile"><br>
-									<input type="hidden" class ="realFilename" name="realFilename2"><input type="hidden" value="x" name="deleteFile"><br>
-									<input type="hidden" class ="realFilename" name="realFilename3"><input type="hidden" value="x" name="deleteFile"><br>
-									<input type="hidden" class ="realFilename" name="realFilename4"><input type="hidden" value="x" name="deleteFile"><br>
-									<input type="hidden" class ="realFilename" name="realFilename5"><input type="hidden" value="x" name="deleteFile"><br>
+									</div>
+									<input type="button" class="btn btn-default" id="addFile" value="파일 추가">
+									<input type="submit" class="btn btn-default pull-right" value="수정완료"> 
+									<br><br>
+									<c:forEach var="i" begin="1" end="${5-fileList.size()}" step="1" varStatus="status">
+										<input type="hidden" class ="realFilename" name="realFilename${i }"><input type="hidden" value="x" class="deleteFile" ><br>
+									</c:forEach>
 							</div>
 						</form>
 						
@@ -89,17 +102,22 @@ input[type=file] {
 
 	$("#addFile").on("click", function(){
 		$("input[type=hidden][class=realFilename]").eq(0).prop("type", "file");
-// 		$("input[type=hidden][name=deleteFile]").eq(0).prop("type", "button");
+		$("input[type=hidden][class=deleteFile]").eq(0).prop("type", "button");
 		
 	})
 	
-// 	$("input[type=button][name=deleteFile]").on("click",function(){
-// 		var indexNo = $(this).index();
-// 		$(this).prop("type", "hidden");
-// 		$("input[type=file][name=realFilename]").eq(indexNo).prop("type", "hidden");
+	$(".dfile").on("click",function(){
+		var fileid = $(this).attr('name');
+		var i = $("#"+fileid+"").attr('name');
+		
+		$('#deleteFile'+i+'').prop('name','deleteFile'+i+'');
+		
+		$(this).prop("type", "hidden");
+		$("#"+fileid+"").prop("type","hidden");
 		
 		
-// 	})
+		
+	})
 
 	
 

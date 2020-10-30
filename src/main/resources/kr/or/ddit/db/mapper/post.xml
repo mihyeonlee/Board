@@ -3,9 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="post">
-	<select id="getPostList" resultType="PostVo">
+	
+	
+	<select id="getPost" resultType="PostVo" parameterType="int">
 		SELECT *
-		FROM post
+		FROM post 
+		WHERE post_seq = #{post_seq}
+	</select>
+	
+	<select id="getFile" resultType="AtchFileVo" parameterType="int">
+		SELECT *
+		FROM atch_file
+		WHERE post_seq = #{post_seq}
 	</select>
 
 	<select id="getPostPage" resultType="PostVo"
@@ -15,7 +24,7 @@
 		(SELECT ROWNUM rn, b.*
 		FROM
 		(SELECT a.post_p_seq,a.post_gn,a.post_seq, a.post_title , a.user_id,
-		a.post_reg_dt, a.board_seq
+		a.post_reg_dt, a.board_seq,a.post_yn
 		FROM (SELECT *
 		FROM post
 		WHERE board_seq = #{board_seq}
@@ -25,17 +34,6 @@
 		ORDER SIBLINGS BY post_gn DESC,post_seq asc) b) c
 		WHERE rn BETWEEN (#{page}-1) * #{pageSize} +1 AND #{page} * #{pageSize}
 
-
-		<!-- SELECT * -->
-		<!-- FROM -->
-		<!-- (SELECT ROWNUM rn, a.* -->
-		<!-- FROM -->
-		<!-- (SELECT * -->
-		<!-- FROM post -->
-		<!-- WHERE board_seq = #{board_seq} -->
-		<!-- ORDER BY 1 desc) a) -->
-		<!-- WHERE rn BETWEEN (#{page}-1) * #{pageSize} +1 AND -->
-		<!-- #{page} * #{pageSize} -->
 
 	</select>
 
@@ -52,8 +50,31 @@
 		</selectKey>
 
 		INSERT INTO post
-		VALUES(#{post_seq},#{post_seq},#{post_title},SYSDATE,#{post_content},#{post_yn},#{board_seq},#{user_id},#{post_p_seq);
-
+		VALUES(#{post_seq},#{post_seq},#{post_title},SYSDATE,#{post_content},#{post_yn},#{board_seq},#{user_id},null)
 
 	</insert>
+	
+	<insert id="insertAnswer" parameterType="PostVo">
+		<selectKey keyProperty="post_seq" resultType="int" order="BEFORE">
+			select POST_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+
+		INSERT INTO post
+		VALUES(#{post_seq},#{post_gn},#{post_title},SYSDATE,#{post_content},#{post_yn},#{board_seq},#{user_id},#{post_p_seq})
+
+	</insert>
+	
+	<insert id="insertFile" parameterType="AtchFileVo">
+		INSERT INTO atch_file VALUES(FILE_SEQ.NEXTVAL, #{file_path},#{file_name},#{post_seq})
+	</insert>
+	
+	<update id="updatePost" parameterType="PostVo">
+		UPDATE post SET post_title = #{post_title}, post_content = #{post_content} 
+		WHERE post_seq = #{post_seq}
+	</update>
+	
+	<update id="deletePost" parameterType="int">
+		UPDATE post SET post_yn = 'N' WHERE post_seq = #{post_seq}
+	</update>
+	
 </mapper>

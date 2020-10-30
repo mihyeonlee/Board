@@ -9,6 +9,9 @@
 		<typeAlias type="kr.or.ddit.board.model.BoardVo" alias="BoardVo"/>
 		<typeAlias type="kr.or.ddit.post.model.PostVo" alias="PostVo"/>
 		<typeAlias type="kr.or.ddit.page.model.PageVo" alias="PageVo"/>
+		<typeAlias type="kr.or.ddit.atchfile.model.AtchFileVo" alias="AtchFileVo"/>
+		<typeAlias type="kr.or.ddit.reply.model.ReplyVo" alias="ReplyVo"/>
+		
 	</typeAliases>
 
   <environments default="development">
@@ -26,5 +29,7 @@
     <mapper resource="kr/or/ddit/db/mapper/user.xml"/>
     <mapper resource="kr/or/ddit/db/mapper/board.xml"/>
     <mapper resource="kr/or/ddit/db/mapper/post.xml"/>
+    <mapper resource="kr/or/ddit/db/mapper/reply.xml"/>
+    <mapper resource="kr/or/ddit/db/mapper/atchFile.xml"/>
   </mappers>
 </configuration>
